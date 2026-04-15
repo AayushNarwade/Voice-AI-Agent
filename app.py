@@ -6,32 +6,24 @@ from modules.stt.stt import transcribe_audio
 from modules.llm.llm import process_with_llm
 from modules.tools.executor import execute_action
 
-# -------------------------
-# Page Config
-# -------------------------
+
 st.set_page_config(page_title="Voice AI Agent", layout="wide")
 
 st.title("🤖 Voice AI Chat Agent")
 
-# -------------------------
-# Session State
-# -------------------------
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if "last_audio_hash" not in st.session_state:
     st.session_state.last_audio_hash = None
 
-# -------------------------
-# Display Chat History
-# -------------------------
+
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.write(msg["content"])
 
-# -------------------------
-# Input Section
-# -------------------------
+
 st.divider()
 st.subheader("🎤 Give Command")
 
@@ -40,9 +32,7 @@ col1, col2 = st.columns(2)
 audio_path = None
 
 
-# -------------------------
-# 🎤 RECORD (AUTO PROCESS)
-# -------------------------
+
 with col1:
     audio = audiorecorder("🎙️ Click to Record", "Recording...")
 
@@ -60,12 +50,10 @@ with col1:
 
             with st.spinner("Processing..."):
 
-                # -------------------------
-                # STT
-                # -------------------------
+                
                 stt_result = transcribe_audio(audio_path)
 
-                # ✅ Silent handling
+
                 if "error" in stt_result:
                     st.session_state.messages.append({
                         "role": "assistant",
@@ -75,15 +63,12 @@ with col1:
 
                 transcription = stt_result["transcription"]
 
-                # User message
                 st.session_state.messages.append({
                     "role": "user",
                     "content": f"🎤 {transcription}"
                 })
 
-                # -------------------------
-                # LLM
-                # -------------------------
+
                 llm_result = process_with_llm(transcription)
 
                 if "error" in llm_result:
@@ -104,9 +89,7 @@ with col1:
                         "content": assistant_msg
                     })
 
-                    # -------------------------
-                    # Tools
-                    # -------------------------
+                  
                     tool_result = execute_action(llm_result)
 
                     if "error" in tool_result:
@@ -134,9 +117,7 @@ with col1:
             st.rerun()
 
 
-# -------------------------
-# 📁 UPLOAD (MANUAL SEND)
-# -------------------------
+
 with col2:
     uploaded_file = st.file_uploader("Upload Audio", type=["wav", "mp3"])
 
@@ -148,9 +129,7 @@ with col2:
             f.write(uploaded_file.read())
 
 
-# -------------------------
-# SEND BUTTON (UPLOAD ONLY)
-# -------------------------
+
 if st.button("🚀 Send"):
 
     if not audio_path:
@@ -158,9 +137,7 @@ if st.button("🚀 Send"):
     else:
         with st.spinner("Processing..."):
 
-            # -------------------------
-            # STT
-            # -------------------------
+           
             stt_result = transcribe_audio(audio_path)
 
             # ✅ Silent handling
@@ -173,15 +150,13 @@ if st.button("🚀 Send"):
 
             transcription = stt_result["transcription"]
 
-            # User message
+            
             st.session_state.messages.append({
                 "role": "user",
                 "content": f"🎤 {transcription}"
             })
 
-            # -------------------------
-            # LLM
-            # -------------------------
+            
             llm_result = process_with_llm(transcription)
 
             if "error" in llm_result:
@@ -202,9 +177,7 @@ if st.button("🚀 Send"):
                     "content": assistant_msg
                 })
 
-                # -------------------------
-                # Tools
-                # -------------------------
+                
                 tool_result = execute_action(llm_result)
 
                 if "error" in tool_result:

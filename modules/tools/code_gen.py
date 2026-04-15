@@ -11,7 +11,6 @@ def write_code(file_name, content):
     try:
         os.makedirs(CODE_DIR, exist_ok=True)
 
-        # Ensure .py extension
         if not file_name.endswith(".py"):
             file_name += ".py"
 

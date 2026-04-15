@@ -1,6 +1,5 @@
 import os
 
-# Get project root
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 TEXT_DIR = os.path.join(BASE_DIR, "output", "text")

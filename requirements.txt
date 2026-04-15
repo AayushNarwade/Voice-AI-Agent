@@ -1,0 +1,6 @@
+streamlit
+streamlit-audiorecorder
+pydub
+python-dotenv
+groq
+ollama

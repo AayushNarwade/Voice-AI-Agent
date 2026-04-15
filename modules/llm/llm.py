@@ -3,9 +3,7 @@ import json
 import os
 
 
-# -------------------------------
-# Load prompt (FIXED PATH)
-# -------------------------------
+
 def load_prompt():
     # Go to project root (3 levels up)
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -16,9 +14,7 @@ def load_prompt():
         return f.read()
 
 
-# -------------------------------
-# Extract JSON safely
-# -------------------------------
+
 def extract_json(response):
     start = response.find("{")
     end = response.rfind("}") + 1
@@ -29,15 +25,13 @@ def extract_json(response):
     return response[start:end]
 
 
-# -------------------------------
-# Main function
-# -------------------------------
+
 def process_with_llm(user_text):
 
     prompt_template = load_prompt()
     final_prompt = prompt_template.replace("{text}", user_text)
 
-    # Call LLM
+
     response = ollama.chat(
         model="mistral",
         messages=[{"role": "user", "content": final_prompt}]

@@ -8,39 +8,29 @@ def execute_action(llm_output):
     file_name = llm_output.get("file_name")
     content = llm_output.get("content")
 
-    # -----------------------
-    # CREATE FILE
-    # -----------------------
+
     if intent == "create_file":
         if not file_name:
             return {"error": "File name missing"}
         return create_file(file_name)
 
-    # -----------------------
-    # WRITE CODE
-    # -----------------------
+
     elif intent == "write_code":
         if not file_name or not content:
             return {"error": "Missing file name or content"}
         return write_code(file_name, content)
 
-    # -----------------------
-    # SUMMARIZE
-    # -----------------------
+
     elif intent == "summarize":
         return summarize_text(content)
 
-    # -----------------------
-    # CHAT
-    # -----------------------
+
     elif intent == "chat":
         return {
             "status": "success",
             "response": content
         }
 
-    # -----------------------
-    # UNKNOWN
-    # -----------------------
+
     else:
         return {"error": "Unknown intent"}
